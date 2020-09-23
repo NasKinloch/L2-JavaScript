@@ -1,0 +1,68 @@
+<!doctype html>
+
+<body>
+    <canvas id="gameCanvas" width="800" height="300"></canvas>
+    <script>
+        var canvas, canvasContext;
+
+        window.onload = function() {
+            canvas = document.getElementById('gameCanvas');
+            canvasContext = canvas.getContext('2d');
+
+            document.addEventListener('keydown', keyPressed);
+            document.addEventListener('keyup', keyReleased);
+
+            setInterval(mainloop, 1000 / 50);
+        }
+
+
+        var playerXpos = 0;
+        var playerYpos = 0;
+        const PLAYER_WIDTH = 20;
+        const PLAYER_HEIGHT = 20;
+        var playerXspeed = 5;
+        var playerYspeed = 5;
+
+        var spaceKeyPressed = false;
+
+        const SPACE_KEY = 32;
+
+        var startingPos = true;
+
+        function mainloop() {
+            colorRect(0, 0, canvas.width, canvas.height, 'black'); // bg
+
+            colorRect(playerXpos, playerYpos, PLAYER_WIDTH, PLAYER_HEIGHT, 'red')
+        }
+
+        if (startingPos) {
+            startingPos = false;
+        }
+
+        function keyPressed(evt) {
+            if (evt.keyCode == SPACE_KEY) {
+                upKeyPressed = true;
+            }
+        }
+
+        function keyReleased(evt) {
+            if (evt.keyCode == SPACE_KEY) {
+                spaceKeyPressed = false;
+            }
+        }
+
+
+
+        function startingPos() {
+            playerYpos = canvas.width / 2 - PLAYER_HEIGHT / 2 - PLAYER_WIDTH / 2;
+            playerYpos = canvas.height / 2 - PLAYER_HEIGHT / 2 - PLAYER_WIDTH / 2;
+
+        }
+
+        function colorRect(x, y, w, h, c) {
+            canvasContext.fillStyle = c;
+            canvasContext.fillRect(x, y, w, h);
+        }
+
+    </script>
+</body>
