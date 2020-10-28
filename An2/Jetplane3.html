@@ -1,0 +1,152 @@
+<!doctype html>
+
+<body>
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
+    <script>
+        var canvas, canvasContext;
+
+        window.onload = function() {
+            canvas = document.getElementById('gameCanvas');
+            canvasContext = canvas.getContext('2d');
+
+            document.addEventListener('keydown', keyPressed);
+            document.addEventListener('keyup', keyReleased);
+
+            setInterval(mainloop, 1000 / 50);
+        }
+
+
+
+        var player = new Image();
+        player.src = 'mmm.png';
+
+        var playerXpos = 50;
+        var playerYpos = 300;
+        const PLAYER_WIDTH = 37;
+        const PLAYER_HEIGHT = 49;
+        var playerXspeed = 5;
+        var playerYspeed = 4;
+
+        var playerSprites = [];
+        var playertotal = 16;
+        var playerRowCount = 0;
+
+        var score = 0;
+
+        for (var i = 0; i < playertotal; i++) {
+            playerSprites[i] = new Array(2);
+
+            playerSprites[i][0] = PLAYER_WIDTH * (i % 4);
+
+            if (i != 0 && i % 4 == 0) {
+                playerRowCount++;
+                playerSprites[i][1] = PLAYER_HEIGHT * playerRowCount;
+            } else {
+                playerSprites[i][1] = PLAYER_HEIGHT * playerRowCount;
+            }
+
+        } // end func
+
+        var spaceKeyPressed = false;
+
+        const SPACE_KEY = 32;
+
+        function keyPressed(evt) {
+
+            if (evt.keyCode == SPACE_KEY) {
+                spaceKeyPressed = true;
+            }
+        }
+
+        function keyReleased(evt) {
+
+            if (evt.keyCode == SPACE_KEY) {
+                spaceKeyPressed = false;
+            }
+        }
+
+
+
+        function mainloop() {
+            colorRect(0, 0, canvas.width, canvas.height, 'black'); // bg
+            colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'red'); // enemy
+
+            drawImages(player,
+                playerSrcX, playerSrcY,
+                PLAYER_WIDTH, PLAYER_HEIGHT,
+                playerXpos, playerYpos, PLAYER_WIDTH, PLAYER_HEIGHT
+            );
+
+            if (startingPos) {
+                startPos();
+                startingPos = false;
+            }
+
+            playerAnimate();
+            enemyMove();
+        }
+        // end func 
+
+        var startingPos = true;
+
+        function startPos() {
+            enemyXpos = canvas.width - ENEMY_SIZE;
+        }
+
+        var enemyXpos = 0;
+        var enemyYpos = 0;
+        var enemyXspeed = 5;
+        var enemyYspeed = 5;
+
+        var enemies - [];
+
+        function makeEnemy() {
+            const ENEMY_SIZE = 25;
+        }
+
+        function enemyMove() {
+            enemyXpos -= enemyXspeed;
+
+            if (enemyXpos < 0) {
+                enemyXpos = canvas.width + ENEMY_SIZE;
+                enemyYpos = Math.floor(Math.random() * (canvas.height - ENEMY_SIZE));
+            }
+
+            if (enemyYpos + ENEMY_SIZE > playerYpos && enemyYpos < playerYpos + PLAYER_WIDTH + PLAYER_HEIGHT && enemyXpos + ENEMY_SIZE > playerXpos && enemyXpos < playerXpos + PLAYER_HEIGHT + PLAYER_WIDTH) {
+                playerXpos = 50;
+                playerYpos = 300;
+            }
+        } // end func
+
+
+
+
+        var playerSrcX = 0;
+        var playerSrcY = 0;
+        var playerSpriteImgNum = 0;
+
+        function playerAnimate() {
+            playerSrcX = playerSprites[Math.floor(playerSpriteImgNum)][0];
+            playerSrcY = playerSprites[Math.floor(playerSpriteImgNum)][1];
+
+            if (spaceKeyPressed) {
+                playerSpriteImgNum += 0.1;
+                playerYpos -= playerYspeed;
+
+                if (playerSpriteImgNum > 15 || playerSpriteImgNum < 12) {
+                    playerSpriteImgNum = 12;
+                }
+            }
+        }
+
+        function colorRect(x, y, w, h, c) {
+            canvasContext.fillStyle = c;
+            canvasContext.fillRect(x, y, w, h);
+        }
+
+        function drawImages(src, sx, sy, sw, sh, dx, dy, dw, dh) {
+            canvasContext.drawImage(src, sx, sy, sw, sh, dx, dy, dw, dh);
+        }
+
+    </script>
+</body>
