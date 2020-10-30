@@ -32,6 +32,10 @@
         var playerRowCount = 0;
 
         var score = 0;
+        var totalEnemies = 8;
+        var enemies = [];
+
+        var startingPos = true;
 
         for (var i = 0; i < playertotal; i++) {
             playerSprites[i] = new Array(2);
@@ -69,7 +73,6 @@
 
         function mainloop() {
             colorRect(0, 0, canvas.width, canvas.height, 'black'); // bg
-            colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'red'); // enemy
 
             drawImages(player,
                 playerSrcX, playerSrcY,
@@ -79,44 +82,71 @@
 
             if (startingPos) {
                 startPos();
+                for (i = 0; i < totalEnemies; i++) {
+                    makeEnemy();
+                }
                 startingPos = false;
             }
-
+            
             playerAnimate();
+            
+            drawEnemy();
             enemyMove();
         }
         // end func 
 
-        var startingPos = true;
 
         function startPos() {
-            enemyXpos = canvas.width - ENEMY_SIZE;
+            enemy.enemyXpos = canvas.width - enemy.ENEMY_SIZE;
         }
-
-        var enemyXpos = 0;
-        var enemyYpos = 0;
-        var enemyXspeed = 5;
-        var enemyYspeed = 5;
-
-        var enemies - [];
 
         function makeEnemy() {
-            const ENEMY_SIZE = 25;
+            var enemyPos = math.floor(math.random() * 3) + 1;
+
+            const ENEMY_SIZE = 40;
+            // var enemyYpos = Math.floor(Math.random() * (canvas.height - ENEMY_SIZE));
+            var enemyYpos = enemyPos * canvas.height / 3;
+            var enemyXpos = 0 - ENEMY_SIZE;
+            var enemyXspeed = Math.floor(Math.random() * (12 - 4) + 4);
+            var enemyYspeed = Math.floor(Math.random() * (4 - 2) + 2);
+
+            var enemy = {
+                enemyXpos: enemyXpos,
+                enemyYpos: enemyYpos,
+                ENEMY_SIZE: ENEMY_SIZE,
+                enemyXspeed: enemyXspeed,
+                enemyYspeed: enemyYspeed,
+            }
+
+            enemies.push(enemy);
         }
 
+
+        function drawEnemy() {
+            enemies.forEach(function(enemy, i) {
+                colorRect(enemy.enemyXpos, enemy.enemyYpos, enemy.ENEMY_SIZE, enemy.ENEMY_SIZE, 'red');
+
+            });
+        }
+
+
         function enemyMove() {
-            enemyXpos -= enemyXspeed;
+            enemies.forEach(function(enemy){
 
-            if (enemyXpos < 0) {
-                enemyXpos = canvas.width + ENEMY_SIZE;
-                enemyYpos = Math.floor(Math.random() * (canvas.height - ENEMY_SIZE));
-            }
 
-            if (enemyYpos + ENEMY_SIZE > playerYpos && enemyYpos < playerYpos + PLAYER_WIDTH + PLAYER_HEIGHT && enemyXpos + ENEMY_SIZE > playerXpos && enemyXpos < playerXpos + PLAYER_HEIGHT + PLAYER_WIDTH) {
-                playerXpos = 50;
-                playerYpos = 300;
-            }
-        } // end func
+                enemy.enemyXpos -= enemy.enemyXspeed;
+
+                if (enemy.enemyXpos < 0) {
+                    enemy.enemyXpos = canvas.width + enemy.ENEMY_SIZE;
+                    enemy.enemyYpos = Math.floor(Math.random() * (canvas.height - enemy.ENEMY_SIZE));
+                }
+
+                if (enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_WIDTH + PLAYER_HEIGHT && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_HEIGHT + PLAYER_WIDTH) {
+                    playerXpos = 50;
+                    playerYpos = 300;
+                } // end func
+            });
+        }
 
 
 
