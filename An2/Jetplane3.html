@@ -19,6 +19,7 @@
 
         var player = new Image();
         player.src = 'mmm.png';
+        //sprite
 
         var playerXpos = 50;
         var playerYpos = 300;
@@ -26,16 +27,20 @@
         const PLAYER_HEIGHT = 49;
         var playerXspeed = 5;
         var playerYspeed = 4;
+        //player
 
         var playerSprites = [];
         var playertotal = 16;
         var playerRowCount = 0;
+        //animation 
 
         var score = 0;
-        var totalEnemies = 8;
+        var totalEnemies = 2;
         var enemies = [];
+        //score and enimies array
 
         var startingPos = true;
+        //starting position
 
         for (var i = 0; i < playertotal; i++) {
             playerSprites[i] = new Array(2);
@@ -50,24 +55,27 @@
             }
 
         } // end func
-
-        var spaceKeyPressed = false;
+        ///animation
 
         const SPACE_KEY = 32;
+        var spaceKeyPressed = false;
+        //jump key
+
 
         function keyPressed(evt) {
 
             if (evt.keyCode == SPACE_KEY) {
                 spaceKeyPressed = true;
             }
-        }
+        } //end func
 
         function keyReleased(evt) {
 
             if (evt.keyCode == SPACE_KEY) {
                 spaceKeyPressed = false;
             }
-        }
+        } //end func
+        //key movement
 
 
 
@@ -82,31 +90,33 @@
 
             if (startingPos) {
                 startPos();
-                for (i = 0; i < totalEnemies; i++) {
-                    makeEnemy();
-                }
-                startingPos = false;
+                
             }
-            
+
             playerAnimate();
-            
+
             drawEnemy();
             enemyMove();
         }
         // end func 
+        //player and enemy array and starting position
 
-
-        function startPos() {
-            enemy.enemyXpos = canvas.width - enemy.ENEMY_SIZE;
+        function startPos(){
+            for (i = 0; i < totalEnemies; i++) {
+                    makeEnemy();
+                }
+            startingPos = false;
         }
+        
+
 
         function makeEnemy() {
-            var enemyPos = math.floor(math.random() * 3) + 1;
+            var enemyPos = Math.floor(Math.random() * 3) + 1;
 
-            const ENEMY_SIZE = 40;
-            // var enemyYpos = Math.floor(Math.random() * (canvas.height - ENEMY_SIZE));
-            var enemyYpos = enemyPos * canvas.height / 3;
-            var enemyXpos = 0 - ENEMY_SIZE;
+            const ENEMY_SIZE = 20;
+             var enemyYpos = Math.floor(Math.random() * (canvas.height - ENEMY_SIZE));
+            var enemyYpos = 0 - ENEMY_SIZE;
+            var enemyXpos = enemyPos * canvas.height / 3;
             var enemyXspeed = Math.floor(Math.random() * (12 - 4) + 4);
             var enemyYspeed = Math.floor(Math.random() * (4 - 2) + 2);
 
@@ -119,7 +129,8 @@
             }
 
             enemies.push(enemy);
-        }
+        } //end func
+        //Enemy array 
 
 
         function drawEnemy() {
@@ -127,11 +138,12 @@
                 colorRect(enemy.enemyXpos, enemy.enemyYpos, enemy.ENEMY_SIZE, enemy.ENEMY_SIZE, 'red');
 
             });
-        }
+        } //end func
+        //enemy 
 
 
         function enemyMove() {
-            enemies.forEach(function(enemy){
+            enemies.forEach(function(enemy) {
 
 
                 enemy.enemyXpos -= enemy.enemyXspeed;
@@ -142,11 +154,12 @@
                 }
 
                 if (enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_WIDTH + PLAYER_HEIGHT && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_HEIGHT + PLAYER_WIDTH) {
-                    playerXpos = 50;
-                    playerYpos = 300;
-                } // end func
+                    playerXpos = 0 + PLAYER_WIDTH * 2;
+                    playerYpos = canvas.height / 2  ;
+                }
             });
-        }
+        } // end func
+        //enemy movement
 
 
 
@@ -154,6 +167,7 @@
         var playerSrcX = 0;
         var playerSrcY = 0;
         var playerSpriteImgNum = 0;
+        //player animate vars
 
         function playerAnimate() {
             playerSrcX = playerSprites[Math.floor(playerSpriteImgNum)][0];
@@ -167,16 +181,17 @@
                     playerSpriteImgNum = 12;
                 }
             }
-        }
+        } //end func
+        //player animate
 
         function colorRect(x, y, w, h, c) {
             canvasContext.fillStyle = c;
             canvasContext.fillRect(x, y, w, h);
-        }
+        } //end func
 
         function drawImages(src, sx, sy, sw, sh, dx, dy, dw, dh) {
             canvasContext.drawImage(src, sx, sy, sw, sh, dx, dy, dw, dh);
-        }
+        } //end func
 
     </script>
 </body>
