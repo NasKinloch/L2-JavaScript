@@ -18,13 +18,13 @@
 
 
         var player = new Image();
-        player.src = 'mmm.png';
+        player.src = 'img.png';
         //sprite
 
         var playerXpos = 50;
         var playerYpos = 300;
         const PLAYER_WIDTH = 37;
-        const PLAYER_HEIGHT = 49;
+        const PLAYER_HEIGHT = 30;
         var playerXspeed = 5;
         var playerYspeed = 4;
         //player
@@ -57,30 +57,39 @@
         } // end func
         ///animation
 
-        const SPACE_KEY = 32;
-        var spaceKeyPressed = false;
-        //jump key
+        const UP_KEY = 38;
+        const DOWN_KEY = 40;
+        var upKeyPressed = false;
+        var downKeyPressed = false;
+        //keys
 
 
         function keyPressed(evt) {
 
-            if (evt.keyCode == SPACE_KEY) {
-                spaceKeyPressed = true;
+            if (evt.keyCode == UP_KEY) {
+                upKeyPressed = true;
             }
-        } //end func
+            if (evt.keyCode == DOWN_KEY) {
+                downKeyPressed = true;
+            }
+        }
+        //end func
 
         function keyReleased(evt) {
 
-            if (evt.keyCode == SPACE_KEY) {
-                spaceKeyPressed = false;
+            if (evt.keyCode == UP_KEY) {
+                upKeyPressed = false;
             }
-        } //end func
+            if (evt.keyCode == DOWN_KEY) {
+                downKeyPressed = false;
+            }
+        }
+        //end func
         //key movement
 
 
-
         function mainloop() {
-            colorRect(0, 0, canvas.width, canvas.height, 'black'); // bg
+            colorRect(0, 0, canvas.width, canvas.height, 'darkgrey'); // bg
 
             drawImages(player,
                 playerSrcX, playerSrcY,
@@ -90,7 +99,7 @@
 
             if (startingPos) {
                 startPos();
-                
+
             }
 
             playerAnimate();
@@ -101,23 +110,23 @@
         // end func 
         //player and enemy array and starting position
 
-        function startPos(){
+        function startPos() {
             for (i = 0; i < totalEnemies; i++) {
-                    makeEnemy();
-                }
+                makeEnemy();
+            }
             startingPos = false;
         }
-        
+
 
 
         function makeEnemy() {
             var enemyPos = Math.floor(Math.random() * 3) + 1;
 
             const ENEMY_SIZE = 20;
-             var enemyYpos = Math.floor(Math.random() * (canvas.height - ENEMY_SIZE));
+            var enemyYpos = Math.floor(Math.random() * (canvas.height - ENEMY_SIZE));
             var enemyYpos = 0 - ENEMY_SIZE;
             var enemyXpos = enemyPos * canvas.height / 3;
-            var enemyXspeed = Math.floor(Math.random() * (12 - 4) + 4);
+            var enemyXspeed = Math.floor(Math.random() * (4 - 4) + 4);
             var enemyYspeed = Math.floor(Math.random() * (4 - 2) + 2);
 
             var enemy = {
@@ -155,7 +164,7 @@
 
                 if (enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_WIDTH + PLAYER_HEIGHT && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_HEIGHT + PLAYER_WIDTH) {
                     playerXpos = 0 + PLAYER_WIDTH * 2;
-                    playerYpos = canvas.height / 2  ;
+                    playerYpos = canvas.height / 2;
                 }
             });
         } // end func
@@ -173,12 +182,21 @@
             playerSrcX = playerSprites[Math.floor(playerSpriteImgNum)][0];
             playerSrcY = playerSprites[Math.floor(playerSpriteImgNum)][1];
 
-            if (spaceKeyPressed) {
+            if (upKeyPressed) {
                 playerSpriteImgNum += 0.1;
                 playerYpos -= playerYspeed;
 
                 if (playerSpriteImgNum > 15 || playerSpriteImgNum < 12) {
                     playerSpriteImgNum = 12;
+                }
+            }
+
+            if (downKeyPressed) {
+                playerSpriteImgNum += 0.1;
+                playerYpos += playerYspeed;
+
+                if (playerSpriteImgNum > 3 || playerSpriteImgNum < 0) {
+                    playerSpriteImgNum = 0;
                 }
             }
         } //end func
